@@ -35,7 +35,7 @@ Crafty.c("NavMeshRender", {
     },
     
     renderText : function (x,y,height,width) {
-        Crafty.e('2D, DOM, Text, MeshRenderLayerText')
+        const e = Crafty.e('2D, DOM, Text, MeshRenderLayerText')
         .attr({
          x: x + boarderGap,
          y: y + boarderGap + height/2 - 8,
@@ -48,6 +48,8 @@ Crafty.c("NavMeshRender", {
          return "{" + textx +  "," + texty + "}"
         })
         .textAlign("center")
+        e._z = 100;
+
     },
 
 	highlightNavMeshRenderLayer : function() {
