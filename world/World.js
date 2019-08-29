@@ -14,13 +14,13 @@ class World {
 			isBaseWalkable = tileIdToImage[baseSq].canStandOn;
 		}
 
-		// var isLayerUpWalkable = false;
-		// var layerUpSq = this._world[layer - 1]["base"][y][x];
-		// if(layerUpSq == 0) {
-		// 	isLayerUpWalkable = true;
-		// } else if(typeof tileIdToImage[layerUpSq] !== 'undefined') {
-		// 	isLayerUpWalkable = !tileIdToImage[layerUpSq].isSolid;
-		// }
+		var isLayerUpWalkable = false;
+		var layerUpSq = this._world[layer - 1]["base"][y][x];
+		if(layerUpSq == 0) {
+			isLayerUpWalkable = true;
+		} else if(typeof tileIdToImage[layerUpSq] !== 'undefined') {
+			isLayerUpWalkable = !tileIdToImage[layerUpSq].isSolid;
+		}
 
 		// // Check for objects
 		// var isObjectNotInWay = true;
@@ -29,7 +29,7 @@ class World {
 		// 	isObjectNotInWay = !objectIdToImage[layerUpObj].isSolid;
 		// }
 
-		return isBaseWalkable; // && isLayerUpWalkable && isObjectNotInWay;
+		return isBaseWalkable && isLayerUpWalkable; // && isObjectNotInWay;
 	}
 
 	renderLayer (layerIndex, layerName, idToEntityDef) {
