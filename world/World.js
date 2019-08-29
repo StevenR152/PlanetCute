@@ -1,9 +1,39 @@
+const blockSize = 50;
+
 class World {
 
 	constructor(world, idToEntityDef) {
 		this._world = world;
 		this._idToEntityDev = idToEntityDef;
 	} 
+
+	setup() {
+		this._constructNavMesh();
+	}
+
+	_constructNavMesh () {
+		console.log("building navmesh for pathfinding...")
+		const generatedPolygonPointsForMesh = []
+		const layerName = "base" // for now other layers later for not walking into trees / objects.
+		for (var layerIndex = 0; layerIndex < 1; layerIndex++) { // only base layer for now.
+			for(var rowIndex = 0; rowIndex < this._world[layerIndex][layerName].length; rowIndex++) {
+				for(var colIndex = 0; colIndex < this._world[layerIndex][layerName][rowIndex].length; colIndex++) {
+					generatedPolygonPointsForMesh.push(this.buildMesh(rowIndex, colIndex));
+				}
+			}
+		}
+		console.log("navmesh built.")
+		console.log(generatedPolygonPointsForMesh)
+	}
+
+	buildMesh (j, i) { // row , collumn
+		return [  					
+				{ x: 0   + j * blockSize,		 	y: 0   + i * blockSize},
+				{ x: blockSize + j * blockSize, 	y: 0   + i * blockSize},
+				{ x: blockSize + j * blockSize, 	y: blockSize + i * blockSize}, 
+				{ x: 0   + j * blockSize,		    y: blockSize + i * blockSize}
+		]
+	}
 
 	isWalkable (layer, x, y) {
 		var isWalkable = true;

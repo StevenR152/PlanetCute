@@ -5,6 +5,7 @@ var player = ''; // Globalise the player for easy console debugging.
 Crafty.defineScene("Game", function() {
 	Crafty.viewport.scale(0.5);
 	var world = new World(worldGrid);
+	world.setup();
 	world.render();
 
 	player = Crafty.e("Grid, BlockDebug, Keyboard, Collision, characterboy")
