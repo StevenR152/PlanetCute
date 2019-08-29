@@ -5,6 +5,7 @@ class World {
 	constructor(world, idToEntityDef) {
 		this._world = world;
 		this._idToEntityDev = idToEntityDef;
+		this._navmesh = Crafty.e("NavMeshRender")
 	} 
 
 	setup() {
@@ -24,6 +25,7 @@ class World {
 		}
 		console.log("navmesh built.")
 		console.log(generatedPolygonPointsForMesh)
+		this._navmesh.setMesh(generatedPolygonPointsForMesh, 0);
 	}
 
 	buildMesh (j, i) { // row , collumn
