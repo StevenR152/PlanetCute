@@ -1,5 +1,5 @@
 var test;
-var boarderGap = 8;
+var boarderGap = 5;
 Crafty.c("NavMeshRender", {
 
     init: function(meshPolygonPoints) { 
@@ -16,14 +16,14 @@ Crafty.c("NavMeshRender", {
     		const width = points[1].x - points[0].x - boarderGap;
     		const x = points[0].x;
     		const y = points[0].y;
-            // this.renderBlock(x, y, height, width);
+            this.renderBlock(x, y, height, width);
             // this.renderText(x, y, height, width);
     	}
     },
 
     renderBlock : function (x,y,height,width) {
         const e = Crafty.e('2D, DOM, Color, MeshRenderLayer, Mouse')
-            .color('#DDD')
+            .color('#DDD', 0.5)
             .attr({
                 x: x + boarderGap / 2,
                 y: y + boarderGap / 2,
@@ -55,10 +55,10 @@ Crafty.c("NavMeshRender", {
 
 		// Clear them all if more than 2.
 		clickedMeshRenders.each(function () {
-			this.color("grey")
+			this.color("#DDD", 0.5)
 		})
 
-		this.color("darkgreen")
+		this.color("darkgreen", 0.5)
 
 	}
 })

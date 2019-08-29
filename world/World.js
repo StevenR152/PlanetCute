@@ -1,4 +1,5 @@
-const blockSize = 50;
+const blockWidth = 101;
+const blockHeight = 81;
 
 class World {
 
@@ -16,13 +17,16 @@ class World {
 		console.log("building navmesh for pathfinding...")
 		const generatedPolygonPointsForMesh = []
 		const layerName = "base" // for now other layers later for not walking into trees / objects.
-		for (var layerIndex = 0; layerIndex < 1; layerIndex++) { // only base layer for now.
-			for(var rowIndex = 0; rowIndex < this._world[layerIndex][layerName].length; rowIndex++) {
-				for(var colIndex = 0; colIndex < this._world[layerIndex][layerName][rowIndex].length; colIndex++) {
+		const layerIndex = 2; // only base layer for now.
+	
+		for(var rowIndex = 0; rowIndex < this._world[layerIndex][layerName].length; rowIndex++) {
+			for(var colIndex = 0; colIndex < this._world[layerIndex][layerName][rowIndex].length; colIndex++) {
+				if(this.isWalkable(layerIndex, rowIndex, colIndex)) {
 					generatedPolygonPointsForMesh.push(this.buildMesh(rowIndex, colIndex));
 				}
 			}
 		}
+	
 		console.log("navmesh built.")
 		console.log(generatedPolygonPointsForMesh)
 		this._navmesh.setMesh(generatedPolygonPointsForMesh, 0);
@@ -30,10 +34,10 @@ class World {
 
 	buildMesh (j, i) { // row , collumn
 		return [  					
-				{ x: 0   + j * blockSize,		 	y: 0   + i * blockSize},
-				{ x: blockSize + j * blockSize, 	y: 0   + i * blockSize},
-				{ x: blockSize + j * blockSize, 	y: blockSize + i * blockSize}, 
-				{ x: 0   + j * blockSize,		    y: blockSize + i * blockSize}
+				{ x: 0   + j * blockWidth,		 	y: 0   + i * blockHeight},
+				{ x: blockWidth + j * blockWidth, 	y: 0   + i * blockHeight},
+				{ x: blockWidth + j * blockWidth, 	y: blockHeight + i * blockHeight}, 
+				{ x: 0   + j * blockWidth,		    y: blockHeight + i * blockHeight}
 		]
 	}
 
@@ -131,6 +135,7 @@ class World {
 	}
 
 	render() {
+		this._navmesh.render()
 		for(var layerIndex = this._world.length -1; layerIndex >= 0; layerIndex--){
 			this.renderLayer(layerIndex, "base", tileIdToImage);
 			if(layerIndex < this._world.length -1) {
