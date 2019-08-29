@@ -8,8 +8,8 @@ Crafty.defineScene("Game", function() {
 	world.render();
 
 	player = Crafty.e("Grid, BlockDebug, Keyboard, Collision, characterboy")
-		.setPosition(3, 6, 0)
-		.setPosition(12, 10, 2)
+		.setPosition(3, 6, 1)
+		.setPosition(12, 5, 1)
    		.collision([0, 32, 32, 0, 64, 32, 32, 64])
 		.onHit("Ramp", function(hitData, firstTimeHit) {
 			// if(!firstTimeHit) return;
