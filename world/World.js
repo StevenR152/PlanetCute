@@ -1,9 +1,45 @@
+const blockWidth = 101;
+const blockHeight = 81;
+
 class World {
 
 	constructor(world, idToEntityDef) {
 		this._world = world;
 		this._idToEntityDev = idToEntityDef;
+		this._navmesh = Crafty.e("NavMeshRender")
 	} 
+
+	setup() {
+		this._constructNavMesh();
+	}
+
+	_constructNavMesh () {
+		console.log("building navmesh for pathfinding...")
+		const generatedPolygonPointsForMesh = []
+		const layerName = "base" // for now other layers later for not walking into trees / objects.
+		const layerIndex = 2; // only base layer for now.
+	
+		for(var rowIndex = 0; rowIndex < this._world[layerIndex][layerName].length; rowIndex++) {
+			for(var colIndex = 0; colIndex < this._world[layerIndex][layerName][rowIndex].length; colIndex++) {
+				if(this.isWalkable(layerIndex, rowIndex, colIndex)) {
+					generatedPolygonPointsForMesh.push(this.buildMesh(rowIndex, colIndex));
+				}
+			}
+		}
+	
+		console.log("navmesh built.")
+		console.log(generatedPolygonPointsForMesh)
+		this._navmesh.setMesh(generatedPolygonPointsForMesh, 0);
+	}
+
+	buildMesh (j, i) { // row , collumn
+		return [  					
+				{ x: 0   + j * blockWidth,		 	y: 0   + i * blockHeight},
+				{ x: blockWidth + j * blockWidth, 	y: 0   + i * blockHeight},
+				{ x: blockWidth + j * blockWidth, 	y: blockHeight + i * blockHeight}, 
+				{ x: 0   + j * blockWidth,		    y: blockHeight + i * blockHeight}
+		]
+	}
 
 	isWalkable (layer, x, y) {
 		var isWalkable = true;
@@ -22,14 +58,14 @@ class World {
 			isLayerUpWalkable = !tileIdToImage[layerUpSq].isSolid;
 		}
 
-		// Check for objects
-		var isObjectNotInWay = true;
-		var layerUpObj = this._world[layer - 1]["object"][y][x];
-		if(typeof objectIdToImage[layerUpObj] !== 'undefined') {
-			isObjectNotInWay = !objectIdToImage[layerUpObj].isSolid;
-		}
+		// // Check for objects
+		// var isObjectNotInWay = true;
+		// var layerUpObj = this._world[layer - 1]["object"][y][x];
+		// if(typeof objectIdToImage[layerUpObj] !== 'undefined') {
+		// 	isObjectNotInWay = !objectIdToImage[layerUpObj].isSolid;
+		// }
 
-		return isBaseWalkable && isLayerUpWalkable && isObjectNotInWay;
+		return isBaseWalkable && isLayerUpWalkable; // && isObjectNotInWay;
 	}
 
 	renderLayer (layerIndex, layerName, idToEntityDef) {
@@ -99,13 +135,14 @@ class World {
 	}
 
 	render() {
+		this._navmesh.render()
 		for(var layerIndex = this._world.length -1; layerIndex >= 0; layerIndex--){
 			this.renderLayer(layerIndex, "base", tileIdToImage);
 			if(layerIndex < this._world.length -1) {
 				// this.renderShadows(layerIndex, decorationIdToImage)
 			}
-			this.renderLayer(layerIndex, "object", objectIdToImage)
-			this.renderLayer(layerIndex, "decorative", decorationIdToImage)
+			// this.renderLayer(layerIndex, "object", objectIdToImage)
+			// this.renderLayer(layerIndex, "decorative", decorationIdToImage)
 		}
 	}
 }
